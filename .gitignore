@@ -9,10 +9,13 @@ __pycache__/
 env/
 .env
 *.egg-info/
-dist/
 build/
 *.egg
 .vscode/
 *.log
 instance/
 .webassets-cache
+
+# PyInstaller Build-Artefakte (aber EXE behalten)
+dist/*.manifest
+dist/*.pyz

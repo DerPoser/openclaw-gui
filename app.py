@@ -1,18 +1,33 @@
 """
 OpenClaw GUI – Flask-basierte Web-Oberfläche für OpenClaw.
 Ermöglicht die intuitive Bedienung von OpenClaw über den Browser.
+Kann als standalone EXE ausgeführt werden (PyInstaller-kompatibel).
 """
 
 import json
 import os
 import subprocess
+import sys
 import threading
 import time
+import webbrowser
 from pathlib import Path
 
-from flask import Flask, jsonify, redirect, render_template, request, url_for
+from flask import Flask, jsonify, redirect, render_template, request, send_from_directory, url_for
 
-app = Flask(__name__)
+
+def resource_path(relative_path: str) -> str:
+    """Pfad zu gebündelten Ressourcen (PyInstaller-kompatibel)."""
+    if hasattr(sys, "_MEIPASS"):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)), relative_path)
+
+
+app = Flask(
+    __name__,
+    template_folder=resource_path("templates"),
+    static_folder=resource_path("static"),
+)
 
 # ---------------------------------------------------------------------------
 # Konfigurationspfade
@@ -269,6 +284,14 @@ def help_page():
     return render_template("help.html")
 
 
+@app.route("/favicon.ico")
+def favicon():
+    """Favicon bereitstellen."""
+    return send_from_directory(
+        resource_path("static"), "favicon.ico", mimetype="image/x-icon"
+    )
+
+
 # ---------------------------------------------------------------------------
 # API-Endpunkte
 # ---------------------------------------------------------------------------
@@ -371,4 +394,14 @@ def api_version():
 # Start
 # ---------------------------------------------------------------------------
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    port = int(os.environ.get("OPENCLAW_GUI_PORT", 5000))
+    host = os.environ.get("OPENCLAW_GUI_HOST", "127.0.0.1")
+
+    # Im EXE-Modus: Browser automatisch öffnen
+    if getattr(sys, "frozen", False):
+        threading.Timer(1.5, lambda: webbrowser.open(f"http://{host}:{port}")).start()
+        print(f"\n  OpenClaw GUI startet auf http://{host}:{port}")
+        print("  Schließe dieses Fenster um die GUI zu beenden.\n")
+        app.run(host=host, port=port, debug=False)
+    else:
+        app.run(host=host, port=port, debug=True)

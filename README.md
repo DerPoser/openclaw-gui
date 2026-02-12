@@ -32,10 +32,19 @@ OpenClaw ist mächtig, aber die Bedienung läuft über die Kommandozeile. Diese 
 ## Voraussetzungen
 
 - **Node.js ≥ 22** (für OpenClaw)
-- **Python ≥ 3.10** (für die GUI)
 - **OpenClaw** installiert (`npm install -g openclaw@latest`)
+- **Python ≥ 3.10** (nur für Entwicklung, NICHT für die EXE nötig)
 
-## Installation
+## Schnellstart (Standalone EXE)
+
+1. Lade `OpenClaw-GUI.exe` aus dem [`dist/`](dist/) Ordner herunter
+2. Stelle sicher dass **OpenClaw** installiert ist (`npm install -g openclaw@latest`)
+3. Doppelklicke auf `OpenClaw-GUI.exe`
+4. Der Browser öffnet sich automatisch unter **http://127.0.0.1:5000**
+
+> Kein Python nötig! Die EXE enthält alles was benötigt wird.
+
+## Installation (Entwicklung)
 
 ```bash
 # 1. Repository klonen
