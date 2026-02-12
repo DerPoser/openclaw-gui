@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Einrichtung – Modell wählen{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-magic"></i> Einrichtungsassistent</h1>
+    <p>Richte OpenClaw in wenigen einfachen Schritten ein — kein technisches Wissen nötig.</p>
+</div>
+
+<!-- Wizard-Steps -->
+<div class="wizard-steps">
+    <div class="wizard-step active">
+        <div class="step-number">1</div>
+        <span class="step-label">KI-Modell wählen</span>
+    </div>
+    <div class="wizard-step">
+        <div class="step-number">2</div>
+        <span class="step-label">Kanäle verbinden</span>
+    </div>
+    <div class="wizard-step">
+        <div class="step-number">3</div>
+        <span class="step-label">Fertig!</span>
+    </div>
+</div>
+
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-cpu"></i>
+        <h3>Schritt 1: Wähle dein KI-Modell</h3>
+    </div>
+
+    <div class="oc-alert oc-alert-info">
+        <i class="bi bi-lightbulb"></i>
+        <div>
+            <strong>Was ist ein KI-Modell?</strong><br>
+            Das KI-Modell ist das „Gehirn" deines Assistenten. Verschiedene Anbieter (Anthropic, OpenAI, etc.) 
+            bieten unterschiedliche Modelle an. Du brauchst ein Abonnement bei einem dieser Anbieter, 
+            damit OpenClaw funktioniert. <strong>Empfohlen: Anthropic Claude Pro/Max</strong> für die beste Leistung.
+        </div>
+    </div>
+
+    <form method="POST">
+        <div class="mb-4">
+            <label for="model" class="form-label">
+                KI-Modell
+                <span class="help-tooltip" data-bs-toggle="tooltip" title="Das Modell bestimmt, wie intelligent und fähig dein Assistent ist. Claude Opus 4.6 ist das leistungsstärkste Modell.">?</span>
+            </label>
+            <select class="form-select" name="model" id="model">
+                <optgroup label="🏆 Empfohlen – Anthropic">
+                    <option value="anthropic/claude-opus-4-6" {% if config.get('agent', {}).get('model') == 'anthropic/claude-opus-4-6' %}selected{% endif %}>
+                        Claude Opus 4.6 — Bestes Modell (Pro/Max Abo nötig)
+                    </option>
+                    <option value="anthropic/claude-sonnet-4" {% if config.get('agent', {}).get('model') == 'anthropic/claude-sonnet-4' %}selected{% endif %}>
+                        Claude Sonnet 4 — Schneller, sehr gut
+                    </option>
+                </optgroup>
+                <optgroup label="OpenAI">
+                    <option value="openai/gpt-5.2" {% if config.get('agent', {}).get('model') == 'openai/gpt-5.2' %}selected{% endif %}>
+                        GPT-5.2 — Neuestes OpenAI-Modell
+                    </option>
+                    <option value="openai/o3" {% if config.get('agent', {}).get('model') == 'openai/o3' %}selected{% endif %}>
+                        O3 — Reasoning/Denk-Modell
+                    </option>
+                </optgroup>
+                <optgroup label="Andere">
+                    <option value="google/gemini-2.5-pro" {% if config.get('agent', {}).get('model') == 'google/gemini-2.5-pro' %}selected{% endif %}>
+                        Gemini 2.5 Pro — Google
+                    </option>
+                    <option value="minimax/minimax-m2.5" {% if config.get('agent', {}).get('model') == 'minimax/minimax-m2.5' %}selected{% endif %}>
+                        MiniMax M2.5 — Lokal möglich
+                    </option>
+                </optgroup>
+            </select>
+            <div class="form-text mt-2">
+                <i class="bi bi-info-circle"></i> Du benötigst ein Abo beim jeweiligen Anbieter. 
+                Bei der Einrichtung (Onboarding) wirst du nach deinen Zugangsdaten gefragt.
+            </div>
+        </div>
+
+        <div class="oc-alert oc-alert-warning">
+            <i class="bi bi-shield-lock"></i>
+            <div>
+                <strong>Sicherheitshinweis:</strong> Deine API-Schlüssel und Zugangsdaten werden ausschließlich 
+                lokal auf deinem Rechner gespeichert (unter <code>~/.openclaw/</code>). Sie werden nie an Dritte 
+                weitergegeben.
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('index') }}" class="btn btn-oc-outline">
+                <i class="bi bi-arrow-left"></i> Zurück
+            </a>
+            <button type="submit" class="btn btn-oc">
+                Weiter <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
+</script>
+{% endblock %}

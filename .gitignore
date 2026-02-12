@@ -1,0 +1,18 @@
+# OpenClaw GUI
+
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+.env
+*.egg-info/
+dist/
+build/
+*.egg
+.vscode/
+*.log
+instance/
+.webassets-cache

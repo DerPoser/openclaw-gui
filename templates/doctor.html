@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Diagnose{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-heart-pulse"></i> Diagnose</h1>
+    <p>Prüfe dein System auf Probleme und bekomme automatische Lösungsvorschläge.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>Was macht die Diagnose?</strong><br>
+        Der Befehl <code>openclaw doctor</code> überprüft deine Installation, Konfiguration, 
+        Gateway-Verbindung und Kanal-Einstellungen. Er zeigt Warnungen und Fehler an und 
+        gibt dir konkrete Tipps zur Behebung.
+    </div>
+</div>
+
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-clipboard-pulse"></i>
+        <h3>Diagnoseergebnis</h3>
+        <a href="{{ url_for('doctor_page') }}" class="btn btn-oc-outline btn-sm ms-auto">
+            <i class="bi bi-arrow-clockwise"></i> Erneut prüfen
+        </a>
+    </div>
+    {% if result.success %}
+        <div class="oc-alert oc-alert-success">
+            <i class="bi bi-check-circle-fill"></i>
+            <div>Diagnose abgeschlossen.</div>
+        </div>
+    {% else %}
+        <div class="oc-alert oc-alert-warning">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <div>Die Diagnose hat Hinweise. Siehe Details unten.</div>
+        </div>
+    {% endif %}
+    <div class="terminal-output" style="max-height: 600px;">{{ result.get('stdout', '') }}
+{% if result.get('stderr') %}{{ result.stderr }}{% endif %}</div>
+</div>
+{% endblock %}

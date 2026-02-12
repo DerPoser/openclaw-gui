@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% block title %}OpenClaw Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>🦞 Dashboard</h1>
+    <p>Willkommen bei deiner OpenClaw-Steuerung — alles auf einen Blick.</p>
+</div>
+
+<!-- Status-Karten -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="oc-card stat-card">
+            <div class="stat-value">{{ version }}</div>
+            <div class="stat-label">Version</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="oc-card stat-card">
+            {% if health.success %}
+                <div class="stat-value" style="color: var(--oc-success)"><i class="bi bi-check-circle-fill"></i></div>
+                <div class="stat-label">Gateway Online</div>
+            {% else %}
+                <div class="stat-value" style="color: var(--oc-text-muted)"><i class="bi bi-dash-circle"></i></div>
+                <div class="stat-label">Gateway Offline</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="oc-card stat-card">
+            <div class="stat-value">{{ config.get('agent', {}).get('model', '–') | replace('anthropic/', '') | replace('openai/', '') }}</div>
+            <div class="stat-label">Aktives Modell</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="oc-card stat-card">
+            <div class="stat-value">{{ config.get('channels', {}).keys() | list | length }}</div>
+            <div class="stat-label">Kanäle konfiguriert</div>
+        </div>
+    </div>
+</div>
+
+<!-- Infobox für Einsteiger -->
+{% if not config.get('agent', {}).get('model') %}
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-info-circle-fill" style="font-size: 1.25rem;"></i>
+    <div>
+        <strong>Erste Schritte?</strong> Starte den <a href="{{ url_for('setup') }}" style="color: var(--oc-primary);">Einrichtungsassistenten</a>, 
+        um OpenClaw in wenigen Minuten zu konfigurieren. Kein technisches Wissen nötig!
+    </div>
+</div>
+{% endif %}
+
+<!-- Schnellaktionen -->
+<h5 class="mb-3" style="font-weight: 600;">Schnellaktionen</h5>
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <a href="{{ url_for('setup') }}" class="quick-action">
+            <div class="qa-icon" style="background: rgba(255, 69, 0, 0.15); color: var(--oc-primary);">
+                <i class="bi bi-magic"></i>
+            </div>
+            <div>
+                <div class="qa-label">Einrichtungsassistent</div>
+                <p class="qa-desc">Schritt-für-Schritt OpenClaw einrichten</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('gateway_page') }}" class="quick-action">
+            <div class="qa-icon" style="background: rgba(34, 197, 94, 0.15); color: var(--oc-success);">
+                <i class="bi bi-hdd-network"></i>
+            </div>
+            <div>
+                <div class="qa-label">Gateway starten</div>
+                <p class="qa-desc">Den OpenClaw-Server starten oder stoppen</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('messages_page') }}" class="quick-action">
+            <div class="qa-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                <i class="bi bi-chat-dots"></i>
+            </div>
+            <div>
+                <div class="qa-label">Nachricht senden</div>
+                <p class="qa-desc">Über WhatsApp, Telegram & Co. senden</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('agent_page') }}" class="quick-action">
+            <div class="qa-icon" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
+                <i class="bi bi-robot"></i>
+            </div>
+            <div>
+                <div class="qa-label">Agent befragen</div>
+                <p class="qa-desc">Direkt mit deinem AI-Assistenten sprechen</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('doctor_page') }}" class="quick-action">
+            <div class="qa-icon" style="background: rgba(245, 158, 11, 0.15); color: var(--oc-warning);">
+                <i class="bi bi-heart-pulse"></i>
+            </div>
+            <div>
+                <div class="qa-label">Diagnose</div>
+                <p class="qa-desc">System prüfen & Probleme beheben</p>
+            </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{{ url_for('help_page') }}" class="quick-action">
+            <div class="qa-icon" style="background: rgba(236, 72, 153, 0.15); color: #ec4899;">
+                <i class="bi bi-book"></i>
+            </div>
+            <div>
+                <div class="qa-label">Hilfe & Doku</div>
+                <p class="qa-desc">Erklärungen und Anleitungen für Einsteiger</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- Was ist OpenClaw -->
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-info-circle-fill"></i>
+        <h3>Was ist OpenClaw?</h3>
+    </div>
+    <p style="color: var(--oc-text-muted); font-size: 0.875rem; line-height: 1.7;">
+        <strong style="color: var(--oc-text);">OpenClaw</strong> ist dein persönlicher KI-Assistent, der auf deinem eigenen Rechner läuft. 
+        Du kannst ihn über <strong>WhatsApp, Telegram, Discord, Slack, Signal, iMessage</strong> und viele weitere Dienste 
+        kontaktieren — genau wie einen echten Freund oder Kollegen. Er kann deine E-Mails bearbeiten, deinen Kalender 
+        verwalten, Webseiten durchsuchen, Dateien erstellen, Code schreiben und vieles mehr.
+    </p>
+    <p style="color: var(--oc-text-muted); font-size: 0.875rem;">
+        Diese GUI ermöglicht es dir, OpenClaw bequem über den Browser einzurichten und zu steuern — 
+        ohne Kommandozeile.
+    </p>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Auto-refresh Gateway-Status alle 30 Sekunden
+setInterval(() => {
+    fetch('/api/health')
+        .then(r => r.json())
+        .then(data => {
+            // Könnte hier dynamisch den Status aktualisieren
+        })
+        .catch(() => {});
+}, 30000);
+</script>
+{% endblock %}

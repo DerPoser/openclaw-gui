@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Einrichtung abgeschlossen{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-magic"></i> Einrichtungsassistent</h1>
+    <p>Dein OpenClaw-Assistent ist bereit!</p>
+</div>
+
+<!-- Wizard-Steps -->
+<div class="wizard-steps">
+    <div class="wizard-step completed">
+        <div class="step-number"><i class="bi bi-check"></i></div>
+        <span class="step-label">KI-Modell wählen</span>
+    </div>
+    <div class="wizard-step completed">
+        <div class="step-number"><i class="bi bi-check"></i></div>
+        <span class="step-label">Kanäle verbinden</span>
+    </div>
+    <div class="wizard-step active">
+        <div class="step-number">3</div>
+        <span class="step-label">Fertig!</span>
+    </div>
+</div>
+
+<div class="oc-card text-center" style="padding: 3rem;">
+    <div style="font-size: 4rem; margin-bottom: 1rem;">🎉🦞</div>
+    <h2 style="font-weight: 700; margin-bottom: 0.5rem;">Grundeinrichtung abgeschlossen!</h2>
+    <p style="color: var(--oc-text-muted); max-width: 500px; margin: 0 auto 2rem;">
+        Dein OpenClaw wurde konfiguriert. Als nächstes musst du den <strong>Gateway starten</strong>, 
+        damit dein Assistent läuft und erreichbar ist.
+    </p>
+
+    <div class="oc-alert oc-alert-info" style="max-width: 600px; margin: 0 auto 2rem; text-align: left;">
+        <i class="bi bi-list-ol"></i>
+        <div>
+            <strong>Nächste Schritte:</strong>
+            <ol style="margin: 0.5rem 0 0; padding-left: 1.25rem;">
+                <li>
+                    <strong>Gateway starten</strong> — Gehe zu 
+                    <a href="{{ url_for('gateway_page') }}" style="color: var(--oc-primary);">Gateway</a> 
+                    und klicke auf „Starten"
+                </li>
+                <li>
+                    <strong>Onboarding</strong> — Wenn du noch kein API-Konto hast, führe den 
+                    CLI-Befehl <code>openclaw onboard</code> aus
+                </li>
+                <li>
+                    <strong>WhatsApp verbinden</strong> — Falls aktiviert, führe 
+                    <code>openclaw channels login</code> aus
+                </li>
+                <li>
+                    <strong>Teste deinen Assistenten</strong> — Gehe zum 
+                    <a href="{{ url_for('agent_page') }}" style="color: var(--oc-primary);">Agenten</a> 
+                    und sende eine Nachricht
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{{ url_for('gateway_page') }}" class="btn btn-oc">
+            <i class="bi bi-play-fill"></i> Gateway starten
+        </a>
+        <a href="{{ url_for('index') }}" class="btn btn-oc-outline">
+            <i class="bi bi-grid-1x2"></i> Zum Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

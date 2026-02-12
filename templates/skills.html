@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Skills{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-puzzle"></i> Skills</h1>
+    <p>Skills erweitern die Fähigkeiten deines Assistenten.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>Was sind Skills?</strong><br>
+        Skills sind Erweiterungen, die deinem Assistenten neue Fähigkeiten beibringen. 
+        Es gibt <strong>gebündelte Skills</strong> (vorinstalliert), <strong>verwaltete Skills</strong> 
+        (von der Community über <a href="https://clawhub.com" target="_blank" style="color: var(--oc-primary);">ClawHub</a>) 
+        und <strong>eigene Skills</strong>, die du selbst schreiben oder vom Assistenten erstellen lassen kannst.
+        Skills liegen unter <code>~/.openclaw/workspace/skills/</code>.
+    </div>
+</div>
+
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-list-check"></i>
+        <h3>Installierte Skills</h3>
+    </div>
+    <div class="terminal-output">{{ result.get('stdout', 'Keine Skills gefunden oder Gateway nicht erreichbar.') }}
+{% if result.get('stderr') %}{{ result.stderr }}{% endif %}</div>
+</div>
+
+<div class="row g-3 mt-2">
+    <div class="col-md-6">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-cloud-download"></i>
+                <h3>ClawHub</h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--oc-text-muted);">
+                ClawHub ist der Skill-Marktplatz für OpenClaw. Finde und installiere Skills, 
+                die andere Nutzer erstellt haben — z.B. für Gmail, Kalender, Obsidian, Spotify und mehr.
+            </p>
+            <a href="https://clawhub.com" target="_blank" class="btn btn-oc-outline btn-sm">
+                <i class="bi bi-box-arrow-up-right"></i> ClawHub öffnen
+            </a>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-pencil-square"></i>
+                <h3>Eigene Skills</h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--oc-text-muted);">
+                Dein Assistent kann auch selbst Skills erstellen! Schreibe ihm einfach z.B.: 
+                „Erstelle einen Skill, der meinen Todoist prüft". 
+                Skills sind SKILL.md-Dateien im Workspace.
+            </p>
+            <a href="{{ url_for('agent_page') }}" class="btn btn-oc-outline btn-sm">
+                <i class="bi bi-robot"></i> Agent fragen
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

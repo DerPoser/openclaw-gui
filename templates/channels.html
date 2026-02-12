@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Kanäle{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-broadcast"></i> Kanäle</h1>
+    <p>Übersicht deiner verbundenen Messaging-Dienste.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>Kanäle</strong> sind die Messaging-Dienste (WhatsApp, Telegram, Discord, etc.), 
+        über die dein OpenClaw-Assistent erreichbar ist. Hier siehst du den Status deiner Verbindungen. 
+        Um Kanäle hinzuzufügen, nutze den <a href="{{ url_for('setup_channels') }}" style="color: var(--oc-primary);">Einrichtungsassistenten</a>.
+    </div>
+</div>
+
+<!-- Konfigurierte Kanäle -->
+<h5 class="mb-3" style="font-weight: 600;">Konfigurierte Kanäle</h5>
+<div class="row g-3 mb-4">
+    {% set channel_info = {
+        'whatsapp': {'icon': 'bi-whatsapp', 'color': 'ch-whatsapp', 'name': 'WhatsApp', 'desc': 'Über WhatsApp Web verbunden. QR-Code nötig.'},
+        'telegram': {'icon': 'bi-telegram', 'color': 'ch-telegram', 'name': 'Telegram', 'desc': 'Bot über BotFather erstellt.'},
+        'discord': {'icon': 'bi-discord', 'color': 'ch-discord', 'name': 'Discord', 'desc': 'Bot im Discord Developer Portal erstellt.'},
+        'slack': {'icon': 'bi-slack', 'color': 'ch-slack', 'name': 'Slack', 'desc': 'Slack-App mit Bot- und App-Token.'},
+        'signal': {'icon': 'bi-shield-lock', 'color': 'ch-signal', 'name': 'Signal', 'desc': 'Benötigt signal-cli Installation.'},
+        'imessage': {'icon': 'bi-apple', 'color': 'ch-imessage', 'name': 'iMessage', 'desc': 'Nur macOS. BlueBubbles empfohlen.'},
+        'bluebubbles': {'icon': 'bi-chat-heart', 'color': 'ch-imessage', 'name': 'BlueBubbles', 'desc': 'Empfohlene iMessage-Integration.'},
+        'msteams': {'icon': 'bi-microsoft-teams', 'color': 'ch-teams', 'name': 'Microsoft Teams', 'desc': 'Bot Framework Integration.'},
+        'webchat': {'icon': 'bi-globe', 'color': 'ch-webchat', 'name': 'WebChat', 'desc': 'Über Gateway-Dashboard erreichbar.'}
+    } %}
+
+    {% for ch_key, ch_data in config.get('channels', {}).items() %}
+    <div class="col-md-6">
+        <div class="oc-card">
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge {{ channel_info.get(ch_key, {}).get('color', 'bg-secondary') }} rounded-pill px-2 py-1" style="font-size: 1.1rem;">
+                    <i class="bi {{ channel_info.get(ch_key, {}).get('icon', 'bi-chat') }}"></i>
+                </span>
+                <div>
+                    <strong>{{ channel_info.get(ch_key, {}).get('name', ch_key) }}</strong>
+                    <div class="form-text mb-0">{{ channel_info.get(ch_key, {}).get('desc', 'Kanal konfiguriert.') }}</div>
+                </div>
+                <span class="badge badge-online ms-auto">Konfiguriert</span>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="col-12">
+        <div class="oc-card text-center" style="padding: 2rem;">
+            <i class="bi bi-broadcast" style="font-size: 2.5rem; color: var(--oc-text-muted);"></i>
+            <p style="color: var(--oc-text-muted); margin-top: 0.5rem;">
+                Keine Kanäle konfiguriert. 
+                <a href="{{ url_for('setup_channels') }}" style="color: var(--oc-primary);">Jetzt Kanäle einrichten</a>
+            </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- System-Status -->
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-terminal"></i>
+        <h3>Kanal-Status (CLI)</h3>
+    </div>
+    <div class="terminal-output">{{ status.get('stdout', 'Führe "openclaw status" aus...') }}
+{% if status.get('stderr') %}
+{{ status.stderr }}{% endif %}</div>
+</div>
+{% endblock %}

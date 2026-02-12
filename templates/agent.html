@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Agent{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-robot"></i> Agent</h1>
+    <p>Sprich direkt mit deinem KI-Assistenten — er kann denken, handeln und Aufgaben erledigen.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>So funktioniert der Agent:</strong><br>
+        Gib eine Aufgabe oder Frage ein und der Agent bearbeitet sie. Er kann Dateien lesen/schreiben, 
+        im Web suchen, E-Mails verwalten und vieles mehr. Die <strong>Denktiefe</strong> bestimmt, 
+        wie gründlich er über komplexe Probleme nachdenkt.
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-chat-left-text"></i>
+                <h3>Dem Agenten schreiben</h3>
+            </div>
+            <form method="POST" id="agentForm">
+                <div class="mb-3">
+                    <label for="message" class="form-label">
+                        Aufgabe oder Frage
+                        <span class="help-tooltip" data-bs-toggle="tooltip" title="Beschreibe, was dein Assistent tun soll. Sei so spezifisch wie möglich für beste Ergebnisse.">?</span>
+                    </label>
+                    <textarea class="form-control" id="message" name="message" rows="5" 
+                              placeholder="z.B. Fasse die letzten 5 E-Mails zusammen..." required></textarea>
+                    <div class="form-text">
+                        <strong>Beispiele:</strong> „Was steht heute in meinem Kalender?" · 
+                        „Schreibe eine E-Mail an ..." · „Erstelle eine Checkliste für meinen Umzug" · 
+                        „Suche Flüge nach Barcelona nächste Woche"
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="thinking" class="form-label">
+                        Denktiefe
+                        <span class="help-tooltip" data-bs-toggle="tooltip" title="Bestimmt, wie viel Rechenzeit der Agent für komplexe Probleme aufwendet. 'Hoch' = gründlicher aber langsamer.">?</span>
+                    </label>
+                    <select class="form-select" id="thinking" name="thinking" style="max-width: 250px;">
+                        <option value="off">Aus — Schnelle einfache Antworten</option>
+                        <option value="minimal">Minimal — Kurz nachdenken</option>
+                        <option value="low">Niedrig — Standard</option>
+                        <option value="medium" selected>Mittel — Empfohlen</option>
+                        <option value="high">Hoch — Gründlich durchdenken</option>
+                        <option value="xhigh">Sehr Hoch — Maximale Analyse</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-oc" id="submitBtn">
+                    <i class="bi bi-send-fill"></i> Absenden
+                </button>
+                <span id="loadingIndicator" style="display: none;" class="ms-2">
+                    <span class="oc-spinner"></span> Agent denkt nach...
+                </span>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        {% if result %}
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-chat-right-text"></i>
+                <h3>Antwort</h3>
+            </div>
+            {% if result.success %}
+                <div class="oc-alert oc-alert-success mb-2">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <div>Antwort erhalten</div>
+                </div>
+            {% else %}
+                <div class="oc-alert oc-alert-danger mb-2">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <div>Fehler — der Gateway läuft möglicherweise nicht.</div>
+                </div>
+            {% endif %}
+            <div class="terminal-output" style="max-height: 600px;">{{ result.stdout }}{% if result.stderr %}
+{{ result.stderr }}{% endif %}</div>
+        </div>
+        {% else %}
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-stars"></i>
+                <h3>Was kann der Agent?</h3>
+            </div>
+            <ul style="color: var(--oc-text-muted); font-size: 0.85rem; line-height: 2; padding-left: 1.25rem;">
+                <li><i class="bi bi-envelope" style="color: var(--oc-primary);"></i> E-Mails lesen, schreiben, beantworten</li>
+                <li><i class="bi bi-calendar" style="color: var(--oc-primary);"></i> Kalender verwalten</li>
+                <li><i class="bi bi-globe" style="color: var(--oc-primary);"></i> Im Web suchen & Infos finden</li>
+                <li><i class="bi bi-file-earmark-code" style="color: var(--oc-primary);"></i> Dateien erstellen & bearbeiten</li>
+                <li><i class="bi bi-terminal" style="color: var(--oc-primary);"></i> Befehle auf deinem PC ausführen</li>
+                <li><i class="bi bi-chat-dots" style="color: var(--oc-primary);"></i> Nachrichten über Kanäle senden</li>
+                <li><i class="bi bi-clock-history" style="color: var(--oc-primary);"></i> Zeitgesteuerte Aufgaben (Cron)</li>
+                <li><i class="bi bi-tools" style="color: var(--oc-primary);"></i> Eigene Skills nutzen & erstellen</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
+
+    document.getElementById('agentForm').addEventListener('submit', function() {
+        document.getElementById('submitBtn').disabled = true;
+        document.getElementById('loadingIndicator').style.display = 'inline';
+    });
+</script>
+{% endblock %}

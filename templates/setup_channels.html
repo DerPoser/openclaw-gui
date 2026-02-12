@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% block title %}Einrichtung – Kanäle{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-magic"></i> Einrichtungsassistent</h1>
+    <p>Verbinde OpenClaw mit deinen bevorzugten Messaging-Diensten.</p>
+</div>
+
+<!-- Wizard-Steps -->
+<div class="wizard-steps">
+    <div class="wizard-step completed">
+        <div class="step-number"><i class="bi bi-check"></i></div>
+        <span class="step-label">KI-Modell wählen</span>
+    </div>
+    <div class="wizard-step active">
+        <div class="step-number">2</div>
+        <span class="step-label">Kanäle verbinden</span>
+    </div>
+    <div class="wizard-step">
+        <div class="step-number">3</div>
+        <span class="step-label">Fertig!</span>
+    </div>
+</div>
+
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-broadcast"></i>
+        <h3>Schritt 2: Kanäle verbinden</h3>
+    </div>
+
+    <div class="oc-alert oc-alert-info">
+        <i class="bi bi-lightbulb"></i>
+        <div>
+            <strong>Was sind Kanäle?</strong><br>
+            Kanäle sind die Messaging-Dienste, über die du mit deinem OpenClaw-Assistenten 
+            kommunizieren kannst. Du kannst z.B. über WhatsApp eine Nachricht senden und 
+            dein Assistent antwortet dir direkt dort. Du kannst mehrere Kanäle gleichzeitig nutzen. 
+            <strong>Überspringe diesen Schritt, wenn du erstmal nur die Web-Oberfläche nutzen möchtest.</strong>
+        </div>
+    </div>
+
+    <form method="POST">
+        <!-- WhatsApp -->
+        <div class="oc-card mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge ch-whatsapp rounded-pill px-2 py-1" style="font-size: 0.85rem;">
+                        <i class="bi bi-whatsapp"></i>
+                    </span>
+                    <strong>WhatsApp</strong>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="whatsapp_enabled" id="whatsappToggle"
+                           onchange="document.getElementById('whatsappConfig').style.display = this.checked ? 'block' : 'none'">
+                    <label class="form-check-label" for="whatsappToggle">Aktivieren</label>
+                </div>
+            </div>
+            <div id="whatsappConfig" style="display: none;">
+                <div class="mb-2">
+                    <label class="form-label">Erlaubte Nummern (kommagetrennt)
+                        <span class="help-tooltip" data-bs-toggle="tooltip" title="Gib die Telefonnummern an, die mit deinem Assistenten sprechen dürfen. Format: +491234567890. Leer lassen = nur du.">?</span>
+                    </label>
+                    <input type="text" class="form-control" name="whatsapp_allow" placeholder="+491234567890, +491111111111">
+                    <div class="form-text">Nur diese Nummern dürfen mit deinem Assistenten chatten. Kommagetrennt.</div>
+                </div>
+                <div class="oc-alert oc-alert-warning" style="font-size: 0.8rem;">
+                    <i class="bi bi-info-circle"></i>
+                    Nach dem Speichern musst du <code>openclaw channels login</code> ausführen, um deinen WhatsApp-Account zu verknüpfen (QR-Code scannen).
+                </div>
+            </div>
+        </div>
+
+        <!-- Telegram -->
+        <div class="oc-card mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge ch-telegram rounded-pill px-2 py-1" style="font-size: 0.85rem;">
+                        <i class="bi bi-telegram"></i>
+                    </span>
+                    <strong>Telegram</strong>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="telegram_enabled" id="telegramToggle"
+                           onchange="document.getElementById('telegramConfig').style.display = this.checked ? 'block' : 'none'">
+                    <label class="form-check-label" for="telegramToggle">Aktivieren</label>
+                </div>
+            </div>
+            <div id="telegramConfig" style="display: none;">
+                <div class="mb-2">
+                    <label class="form-label">Bot-Token
+                        <span class="help-tooltip" data-bs-toggle="tooltip" title="Erstelle einen Bot bei @BotFather in Telegram und kopiere den Token hierher.">?</span>
+                    </label>
+                    <input type="password" class="form-control" name="telegram_token" placeholder="123456:ABCDEF...">
+                    <div class="form-text">Erstelle einen Bot über <strong>@BotFather</strong> in Telegram. Er gibt dir einen Token.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Discord -->
+        <div class="oc-card mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge ch-discord rounded-pill px-2 py-1" style="font-size: 0.85rem;">
+                        <i class="bi bi-discord"></i>
+                    </span>
+                    <strong>Discord</strong>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="discord_enabled" id="discordToggle"
+                           onchange="document.getElementById('discordConfig').style.display = this.checked ? 'block' : 'none'">
+                    <label class="form-check-label" for="discordToggle">Aktivieren</label>
+                </div>
+            </div>
+            <div id="discordConfig" style="display: none;">
+                <div class="mb-2">
+                    <label class="form-label">Bot-Token
+                        <span class="help-tooltip" data-bs-toggle="tooltip" title="Erstelle eine Application im Discord Developer Portal und kopiere den Bot-Token.">?</span>
+                    </label>
+                    <input type="password" class="form-control" name="discord_token" placeholder="DISCORD_BOT_TOKEN...">
+                    <div class="form-text">Erstelle unter <strong>discord.com/developers</strong> eine Bot-Application und kopiere den Token.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slack -->
+        <div class="oc-card mb-3">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge ch-slack rounded-pill px-2 py-1" style="font-size: 0.85rem;">
+                        <i class="bi bi-slack"></i>
+                    </span>
+                    <strong>Slack</strong>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="slack_enabled" id="slackToggle"
+                           onchange="document.getElementById('slackConfig').style.display = this.checked ? 'block' : 'none'">
+                    <label class="form-check-label" for="slackToggle">Aktivieren</label>
+                </div>
+            </div>
+            <div id="slackConfig" style="display: none;">
+                <div class="mb-2">
+                    <label class="form-label">Bot-Token (xoxb-...)</label>
+                    <input type="password" class="form-control" name="slack_bot_token" placeholder="xoxb-...">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">App-Token (xapp-...)</label>
+                    <input type="password" class="form-control" name="slack_app_token" placeholder="xapp-...">
+                    <div class="form-text">Erstelle eine Slack-App unter <strong>api.slack.com/apps</strong>.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <a href="{{ url_for('setup') }}" class="btn btn-oc-outline">
+                <i class="bi bi-arrow-left"></i> Zurück
+            </a>
+            <div class="d-flex gap-2">
+                <a href="{{ url_for('setup_done') }}" class="btn btn-oc-outline">Überspringen</a>
+                <button type="submit" class="btn btn-oc">
+                    Speichern & Weiter <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
+</script>
+{% endblock %}

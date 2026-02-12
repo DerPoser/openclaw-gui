@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}KI-Modelle{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-cpu"></i> KI-Modelle</h1>
+    <p>Wähle und verwalte das KI-Modell, das dein Assistent nutzt.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>KI-Modelle erklärt:</strong><br>
+        Das Modell bestimmt, wie intelligent dein Assistent ist. <strong>Claude Opus 4.6</strong> (Anthropic) 
+        ist das leistungsstärkste und empfohlene Modell. Du brauchst ein Abo beim jeweiligen Anbieter:
+        <ul style="margin: 0.25rem 0 0; padding-left: 1.25rem;">
+            <li><strong>Anthropic Claude:</strong> Pro ($20/Monat) oder Max ($100-200/Monat) — <a href="https://www.anthropic.com/" target="_blank" style="color: var(--oc-primary);">anthropic.com</a></li>
+            <li><strong>OpenAI GPT/O-Serie:</strong> ChatGPT Plus ($20/Monat) — <a href="https://openai.com/" target="_blank" style="color: var(--oc-primary);">openai.com</a></li>
+            <li><strong>Google Gemini:</strong> Gemini Advanced — <a href="https://gemini.google.com/" target="_blank" style="color: var(--oc-primary);">gemini.google.com</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-sliders"></i>
+                <h3>Modell ändern</h3>
+            </div>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="model" class="form-label">Aktives Modell</label>
+                    <select class="form-select" name="model" id="model">
+                        <optgroup label="Anthropic (Empfohlen)">
+                            <option value="anthropic/claude-opus-4-6" {% if config.get('agent', {}).get('model') == 'anthropic/claude-opus-4-6' %}selected{% endif %}>
+                                Claude Opus 4.6 — Bestes Gesamtmodell
+                            </option>
+                            <option value="anthropic/claude-sonnet-4" {% if config.get('agent', {}).get('model') == 'anthropic/claude-sonnet-4' %}selected{% endif %}>
+                                Claude Sonnet 4 — Schnell & schlau
+                            </option>
+                        </optgroup>
+                        <optgroup label="OpenAI">
+                            <option value="openai/gpt-5.2" {% if config.get('agent', {}).get('model') == 'openai/gpt-5.2' %}selected{% endif %}>
+                                GPT-5.2 — Neuestes OpenAI
+                            </option>
+                            <option value="openai/o3" {% if config.get('agent', {}).get('model') == 'openai/o3' %}selected{% endif %}>
+                                O3 — Reasoning-Modell
+                            </option>
+                        </optgroup>
+                        <optgroup label="Google">
+                            <option value="google/gemini-2.5-pro" {% if config.get('agent', {}).get('model') == 'google/gemini-2.5-pro' %}selected{% endif %}>
+                                Gemini 2.5 Pro
+                            </option>
+                        </optgroup>
+                        <optgroup label="Lokal / Andere">
+                            <option value="minimax/minimax-m2.5" {% if config.get('agent', {}).get('model') == 'minimax/minimax-m2.5' %}selected{% endif %}>
+                                MiniMax M2.5
+                            </option>
+                        </optgroup>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-oc">
+                    <i class="bi bi-check-lg"></i> Modell speichern
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-info-circle"></i>
+                <h3>Aktuelles Modell</h3>
+            </div>
+            <div class="text-center" style="padding: 1.5rem;">
+                <div style="font-size: 2.5rem;">🧠</div>
+                <div style="font-size: 1.1rem; font-weight: 600; margin-top: 0.5rem;">
+                    {{ config.get('agent', {}).get('model', 'Nicht konfiguriert') }}
+                </div>
+                <div class="form-text mt-1">
+                    {% if 'opus' in config.get('agent', {}).get('model', '') %}
+                        Leistungsstärkstes Modell — ideal für komplexe Aufgaben
+                    {% elif 'sonnet' in config.get('agent', {}).get('model', '') %}
+                        Schnell und effizient — ideal für den Alltag
+                    {% elif 'gpt' in config.get('agent', {}).get('model', '') %}
+                        OpenAI-Modell — vielseitig einsetzbar
+                    {% else %}
+                        Wähle links ein Modell aus
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-shield-check"></i>
+                <h3>Model-Failover</h3>
+            </div>
+            <p style="font-size: 0.85rem; color: var(--oc-text-muted);">
+                OpenClaw unterstützt automatisches <strong>Model-Failover</strong>: Wenn dein Hauptmodell 
+                nicht verfügbar ist (z.B. Rate Limit), wechselt es automatisch zu einem Backup-Modell. 
+                Dies konfigurierst du in der erweiterten Konfiguration.
+            </p>
+            <a href="https://docs.openclaw.ai/concepts/model-failover" target="_blank" class="btn btn-oc-outline btn-sm">
+                <i class="bi bi-box-arrow-up-right"></i> Mehr erfahren
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

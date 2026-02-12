@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}Gateway{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-hdd-network"></i> Gateway</h1>
+    <p>Der Gateway ist das Herz von OpenClaw — er verbindet alle Kanäle, Tools und deinen KI-Agenten.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>Was ist der Gateway?</strong><br>
+        Der Gateway ist der lokale Server, der auf deinem Rechner läuft. Er empfängt Nachrichten 
+        von WhatsApp, Telegram & Co., leitet sie an dein KI-Modell weiter und sendet die Antworten zurück. 
+        <strong>Er muss laufen, damit dein Assistent funktioniert.</strong>
+    </div>
+</div>
+
+<!-- Status -->
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-activity"></i>
+                <h3>Status</h3>
+            </div>
+            <div id="gatewayStatus">
+                {% if health.success %}
+                    <span class="badge badge-online rounded-pill px-3 py-2">
+                        <i class="bi bi-circle-fill"></i> Online
+                    </span>
+                {% else %}
+                    <span class="badge badge-offline rounded-pill px-3 py-2">
+                        <i class="bi bi-circle-fill"></i> Offline
+                    </span>
+                {% endif %}
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-oc" id="btnStart" onclick="gatewayAction('start')">
+                    <i class="bi bi-play-fill"></i> Starten
+                </button>
+                <button class="btn btn-oc-outline" id="btnStop" onclick="gatewayAction('stop')">
+                    <i class="bi bi-stop-fill"></i> Stoppen
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-gear"></i>
+                <h3>Einstellungen</h3>
+            </div>
+            <div class="mb-2">
+                <label class="form-label">Port
+                    <span class="help-tooltip" data-bs-toggle="tooltip" title="Der Port, auf dem der Gateway lauscht. Standard: 18789. Nur ändern, wenn belegt.">?</span>
+                </label>
+                <input type="number" class="form-control" id="gatewayPort" value="18789" style="max-width: 200px;">
+            </div>
+            <div class="form-text">
+                Standard-Port: <strong>18789</strong>. Der Gateway ist unter <code>ws://127.0.0.1:18789</code> erreichbar.<br>
+                Dashboard: <a href="http://127.0.0.1:18789" target="_blank" style="color: var(--oc-primary);">http://127.0.0.1:18789</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Logs -->
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-terminal"></i>
+        <h3>Gateway-Log</h3>
+        <button class="btn btn-oc-outline btn-sm ms-auto" onclick="refreshLogs()">
+            <i class="bi bi-arrow-clockwise"></i> Aktualisieren
+        </button>
+    </div>
+    <div class="terminal-output" id="gatewayLogs">
+{% for line in logs %}{{ line }}
+{% endfor %}
+{% if not logs %}Noch keine Log-Einträge. Starte den Gateway, um Logs zu sehen.{% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
+
+function gatewayAction(action) {
+    const port = document.getElementById('gatewayPort').value;
+    fetch('/api/gateway/' + action, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ port: parseInt(port) })
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        setTimeout(() => location.reload(), 2000);
+    })
+    .catch(err => alert('Fehler: ' + err));
+}
+
+function refreshLogs() {
+    fetch('/api/gateway/logs')
+        .then(r => r.json())
+        .then(data => {
+            const el = document.getElementById('gatewayLogs');
+            el.textContent = data.logs.join('\n') || 'Keine Logs vorhanden.';
+            el.scrollTop = el.scrollHeight;
+        });
+}
+
+// Auto-Refresh Logs alle 5 Sekunden
+setInterval(refreshLogs, 5000);
+</script>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Nachrichten senden{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-chat-dots"></i> Nachrichten senden</h1>
+    <p>Sende Nachrichten über deine verbundenen Kanäle an beliebige Empfänger.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>Wie funktioniert das?</strong><br>
+        Hier kannst du über OpenClaw Nachrichten über WhatsApp, Telegram, Discord etc. versenden. 
+        Der <strong>Gateway muss laufen</strong>, damit Nachrichten zugestellt werden. 
+        Gib die Zielgruppe/Nummer an und wähle optional den Kanal.
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-send"></i>
+                <h3>Neue Nachricht</h3>
+            </div>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="target" class="form-label">
+                        Empfänger
+                        <span class="help-tooltip" data-bs-toggle="tooltip" title="Gib eine Telefonnummer (z.B. +491234567890) für WhatsApp/Signal ein, oder einen Benutzernamen (@name) für Telegram, oder eine Channel-ID für Discord/Slack.">?</span>
+                    </label>
+                    <input type="text" class="form-control" id="target" name="target" 
+                           placeholder="+491234567890 oder @benutzername" required>
+                    <div class="form-text">
+                        <strong>WhatsApp/Signal:</strong> Telefonnummer mit Ländervorwahl (+49...)<br>
+                        <strong>Telegram:</strong> @benutzername oder Chat-ID<br>
+                        <strong>Discord/Slack:</strong> Channel-ID oder Benutzername
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="channel" class="form-label">
+                        Kanal (optional)
+                        <span class="help-tooltip" data-bs-toggle="tooltip" title="Wenn du einen bestimmten Kanal erzwingen willst. Leer lassen für automatische Erkennung.">?</span>
+                    </label>
+                    <select class="form-select" id="channel" name="channel">
+                        <option value="">Automatisch erkennen</option>
+                        <option value="whatsapp">WhatsApp</option>
+                        <option value="telegram">Telegram</option>
+                        <option value="discord">Discord</option>
+                        <option value="slack">Slack</option>
+                        <option value="signal">Signal</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="message" class="form-label">Nachricht</label>
+                    <textarea class="form-control" id="message" name="message" rows="4" 
+                              placeholder="Deine Nachricht hier eingeben..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-oc">
+                    <i class="bi bi-send-fill"></i> Nachricht senden
+                </button>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        {% if result %}
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-check-circle"></i>
+                <h3>Ergebnis</h3>
+            </div>
+            {% if result.success %}
+                <div class="oc-alert oc-alert-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <div>Nachricht erfolgreich gesendet!</div>
+                </div>
+            {% else %}
+                <div class="oc-alert oc-alert-danger">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <div>Fehler beim Senden der Nachricht.</div>
+                </div>
+            {% endif %}
+            <div class="terminal-output">{{ result.stdout }}{{ result.stderr }}</div>
+        </div>
+        {% else %}
+        <div class="oc-card">
+            <div class="oc-card-header">
+                <i class="bi bi-info-circle"></i>
+                <h3>Tipps</h3>
+            </div>
+            <ul style="color: var(--oc-text-muted); font-size: 0.85rem; line-height: 1.8; padding-left: 1.25rem;">
+                <li>Der <strong>Gateway muss laufen</strong>, damit Nachrichten gesendet werden</li>
+                <li>Der entsprechende <strong>Kanal muss konfiguriert</strong> sein</li>
+                <li>WhatsApp erfordert eine einmalige <strong>QR-Code-Verknüpfung</strong></li>
+                <li>Du kannst auch den <strong>Agenten</strong> bitten, Nachrichten für dich zu senden</li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (el) { return new bootstrap.Tooltip(el); });
+</script>
+{% endblock %}

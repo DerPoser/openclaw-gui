@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Sitzungen{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1><i class="bi bi-journal-text"></i> Sitzungen</h1>
+    <p>Übersicht aller aktiven und vergangenen Konversationen.</p>
+</div>
+
+<div class="oc-alert oc-alert-info">
+    <i class="bi bi-lightbulb"></i>
+    <div>
+        <strong>Was sind Sitzungen?</strong><br>
+        Eine Sitzung ist ein laufendes Gespräch zwischen dir und deinem Assistenten. Jeder Kanal und 
+        jede Gruppe hat eine eigene Sitzung mit eigenem Gedächtnis. Die „main"-Sitzung ist dein 
+        Hauptgespräch.
+    </div>
+</div>
+
+<div class="oc-card">
+    <div class="oc-card-header">
+        <i class="bi bi-list-ul"></i>
+        <h3>Aktive Sitzungen</h3>
+    </div>
+    {% if sessions %}
+    <div class="table-responsive">
+        <table class="table table-dark table-hover" style="font-size: 0.85rem;">
+            <thead>
+                <tr>
+                    <th>Sitzung</th>
+                    <th>Kanal</th>
+                    <th>Letzte Aktivität</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for session in sessions %}
+                <tr>
+                    <td><code>{{ session.get('id', session.get('name', '–')) }}</code></td>
+                    <td>{{ session.get('channel', '–') }}</td>
+                    <td>{{ session.get('lastActivity', '–') }}</td>
+                    <td><span class="badge badge-online">Aktiv</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="terminal-output">{{ raw.get('stdout', 'Keine Sitzungsdaten verfügbar.') }}
+{% if raw.get('stderr') %}{{ raw.stderr }}{% endif %}</div>
+    {% endif %}
+</div>
+{% endblock %}
