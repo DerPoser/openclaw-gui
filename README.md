@@ -1,11 +1,14 @@
 # 🦞 OpenClaw GUI
 
-Eine moderne, benutzerfreundliche **Flask-Web-Oberfläche** für [OpenClaw](https://github.com/openclaw/openclaw) — den persönlichen KI-Assistenten, der auf deinem eigenen Rechner läuft.
+> **Erstellt von [Nico Poser](https://github.com/DerPoser)** — Eine moderne, benutzerfreundliche Flask-Web-Oberfläche für [OpenClaw](https://github.com/openclaw/openclaw)
+
+Der persönliche KI-Assistent, der auf deinem eigenen Rechner läuft — jetzt mit **grafischer Oberfläche**.
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)
 ![Flask](https://img.shields.io/badge/Flask-3.x-lightgrey?logo=flask)
 ![OpenClaw](https://img.shields.io/badge/OpenClaw-2026.x-FF4500?logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48dGV4dCB5PSIuOWVtIiBmb250LXNpemU9IjkwIj7wn6Z+PC90ZXh0Pjwvc3ZnPg==)
 ![License](https://img.shields.io/badge/Lizenz-MIT-green)
+![Author](https://img.shields.io/badge/Autor-Nico%20Poser-FF4500)
 
 ## Warum?
 
@@ -27,7 +30,31 @@ OpenClaw ist mächtig, aber die Bedienung läuft über die Kommandozeile. Diese 
 
 ## Screenshots
 
-> Die GUI bietet ein Dashboard mit Statusübersicht, Schnellaktionen und einen 3-Schritte-Einrichtungsassistenten.
+## Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Einrichtungsassistent
+![Setup Wizard](screenshots/setup.png)
+
+### KI-Agent Chat
+![Agent](screenshots/agent.png)
+
+### KI-Modelle
+![Modelle](screenshots/models.png)
+
+### Gateway-Steuerung
+![Gateway](screenshots/gateway.png)
+
+### Kanäle
+![Kanäle](screenshots/channels.png)
+
+### Nachrichten senden
+![Nachrichten](screenshots/messages.png)
+
+### Hilfe & Anleitung
+![Hilfe](screenshots/help.png)
 
 ## Voraussetzungen
 
@@ -125,9 +152,15 @@ openclaw-gui/
 - **OpenClaw:** CLI-Integration via `subprocess`
 - **Design:** Dark Mode, Orange-Akzent (#FF4500), responsive Sidebar
 
+## Autor
+
+**Nico Poser** — [@DerPoser](https://github.com/DerPoser)
+
+Dieses Projekt wurde von Nico Poser entwickelt, um OpenClaw für alle zugänglich zu machen.
+
 ## Lizenz
 
-MIT License — siehe [LICENSE](LICENSE).
+MIT License — Copyright (c) 2025 Nico Poser — siehe [LICENSE](LICENSE).
 
 ## Links
 
