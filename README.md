@@ -39,7 +39,7 @@ OpenClaw ist mächtig, aber die Bedienung läuft über die Kommandozeile. Diese 
 
 ```bash
 # 1. Repository klonen
-git clone https://github.com/CodinLeyla/openclaw-gui.git
+git clone https://github.com/DerPoser/openclaw-gui.git
 cd openclaw-gui
 
 # 2. Python Virtual Environment erstellen
